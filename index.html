@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CourseERA | All-in-One AI Chat</title>
     
-    <!-- Google Fonts for Modern Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -20,6 +18,8 @@
             --primary-hover: #2563eb;
             --gradient-start: #6366f1;
             --gradient-end: #a855f7;
+            --success-start: #10b981;
+            --success-end: #059669;
         }
 
         * {
@@ -111,6 +111,7 @@
         .download-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             color: white;
@@ -119,14 +120,25 @@
             border-radius: 50px;
             font-size: 1.25rem;
             font-weight: 600;
+            min-width: 300px; /* Keeps button size stable during text changes */
             box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
             animation: pulse 2s infinite, fadeInUp 0.8s ease-out 0.6s both;
         }
 
-        .download-btn:hover {
+        .download-btn:hover:not(.loading) {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 35px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Button Success State */
+        .download-btn.success {
+            background: linear-gradient(135deg, var(--success-start), var(--success-end));
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            animation: none;
+            transform: scale(1.05);
         }
 
         .install-note {
@@ -134,6 +146,7 @@
             font-size: 0.85rem;
             color: var(--text-muted);
             animation: fadeInUp 0.8s ease-out 0.8s both;
+            min-height: 40px;
         }
 
         .install-note a {
@@ -217,7 +230,7 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .hero p { font-size: 1rem; }
-            .download-btn { width: 100%; justify-content: center; font-size: 1.1rem; }
+            .download-btn { width: 100%; font-size: 1.1rem; }
             .features { grid-template-columns: 1fr; padding-top: 20px; }
             .feature-card { text-align: center; }
             .feature-icon { margin: 0 auto 20px auto; }
@@ -236,11 +249,9 @@
         <h1>Your All-in-One<br><span>AI Companion</span></h1>
         <p>Experience the most advanced, fast, and intelligent AI chat application right on your Android device. No subscriptions, just pure intelligence.</p>
         
-        <!-- DOWNLOAD BUTTON -->
-        <!-- Ensure your file is named exactly 'CourseERA.apk' and is in the same folder as this index.html -->
-        <a href="CourseEra.apk" download="CourseEra.apk" class="download-btn" onclick="showInstallGuide()">
+        <button id="downloadBtn" class="download-btn" onclick="startDownload()">
             <i class="fab fa-android"></i> Download APK (55MB)
-        </a>
+        </button>
         
         <p class="install-note" id="install-text">
             Requires Android 8.0+. <br>Note: You may need to enable "Allow installation from Unknown Sources".
@@ -269,12 +280,60 @@
         &copy; 2026 CourseERA. All rights reserved.
     </footer>
 
-    <!-- Simple script to give user feedback when they click download -->
     <script>
-        function showInstallGuide() {
+        function startDownload() {
+            const btn = document.getElementById('downloadBtn');
             const note = document.getElementById('install-text');
-            note.style.color = '#a855f7';
-            note.innerHTML = '<strong>Downloading...</strong><br>Once downloaded, tap the file to install. If prompted, tap "Settings" and enable "Allow from this source".';
+            
+            // Prevent multiple clicks while loading
+            if(btn.classList.contains('loading')) return;
+            
+            btn.classList.add('loading');
+            btn.style.animation = 'none'; // Stop pulsing while loading
+            
+            let secondsLeft = 3;
+            
+            // Initial loading state
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Preparing... ${secondsLeft}s`;
+            
+            // Countdown timer
+            const countdown = setInterval(() => {
+                secondsLeft--;
+                
+                if(secondsLeft > 0) {
+                    btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Preparing... ${secondsLeft}s`;
+                } else {
+                    // Stop timer
+                    clearInterval(countdown);
+                    
+                    // Change button to success state
+                    btn.classList.add('success');
+                    btn.innerHTML = `<i class="fas fa-check-circle"></i> Downloading!`;
+                    
+                    // Trigger the actual file download
+                    const link = document.createElement('a');
+                    link.href = 'CourseEra.apk';
+                    link.download = 'CourseEra.apk';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Update the text below the button
+                    note.style.color = '#a855f7';
+                    note.style.fontWeight = '600';
+                    note.innerHTML = 'Download started! <br>Once downloaded, open the file to install.';
+                    
+                    // Optional: Reset button after 8 seconds so they can download again if needed
+                    setTimeout(() => {
+                        btn.classList.remove('loading', 'success');
+                        btn.innerHTML = `<i class="fab fa-android"></i> Download APK (55MB)`;
+                        btn.style.animation = 'pulse 2s infinite, fadeInUp 0.8s ease-out 0.6s both';
+                        note.style.color = 'var(--text-muted)';
+                        note.style.fontWeight = 'normal';
+                        note.innerHTML = 'Requires Android 8.0+. <br>Note: You may need to enable "Allow installation from Unknown Sources".';
+                    }, 8000);
+                }
+            }, 1000);
         }
     </script>
 
