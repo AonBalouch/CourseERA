@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseERA | All-in-One AI Chat</title>
+    
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary-accent: #3b82f6;
+            --primary-hover: #2563eb;
+            --gradient-start: #6366f1;
+            --gradient-end: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero Section */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 5% 60px 5%;
+            margin-top: 50px;
+        }
+
+        .hero-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 span {
+            color: var(--primary-accent);
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite, fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.5);
+        }
+
+        .install-note {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .install-note a {
+            color: var(--primary-accent);
+            text-decoration: none;
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px 5% 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: left;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-accent);
+            margin-bottom: 20px;
+            background: rgba(59, 130, 246, 0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .download-btn { width: 100%; justify-content: center; font-size: 1.1rem; }
+            .features { grid-template-columns: 1fr; padding-top: 20px; }
+            .feature-card { text-align: center; }
+            .feature-icon { margin: 0 auto 20px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">CourseERA</div>
+        <div style="color: var(--text-muted); font-size: 0.9rem;">v1.0.0 Android</div>
+    </header>
+
+    <main class="hero">
+        <div class="hero-badge">Latest Release: Seamless AI Integration</div>
+        <h1>Your All-in-One<br><span>AI Companion</span></h1>
+        <p>Experience the most advanced, fast, and intelligent AI chat application right on your Android device. No subscriptions, just pure intelligence.</p>
+        
+        <!-- DOWNLOAD BUTTON -->
+        <!-- Ensure your file is named exactly 'CourseERA.apk' and is in the same folder as this index.html -->
+        <a href="CourseERA.apk" download="CourseERA.apk" class="download-btn" onclick="showInstallGuide()">
+            <i class="fab fa-android"></i> Download APK (55MB)
+        </a>
+        
+        <p class="install-note" id="install-text">
+            Requires Android 8.0+. <br>Note: You may need to enable "Allow installation from Unknown Sources".
+        </p>
+    </main>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-brain"></i></div>
+            <h3>Advanced AI Chat</h3>
+            <p>Engage in fluid, context-aware conversations. From coding help to creative writing, CourseERA handles it all instantly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+            <h3>Lightning Fast</h3>
+            <p>Optimized for mobile performance. A smooth 60fps interface with instant response times ensures you never wait.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Private & Secure</h3>
+            <p>Your chat data stays on your device. We believe in privacy-first architecture without sacrificing capability.</p>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 CourseERA. All rights reserved.
+    </footer>
+
+    <!-- Simple script to give user feedback when they click download -->
+    <script>
+        function showInstallGuide() {
+            const note = document.getElementById('install-text');
+            note.style.color = '#a855f7';
+            note.innerHTML = '<strong>Downloading...</strong><br>Once downloaded, tap the file to install. If prompted, tap "Settings" and enable "Allow from this source".';
+        }
+    </script>
+
+</body>
+</html>
